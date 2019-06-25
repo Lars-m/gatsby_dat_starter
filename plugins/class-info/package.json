@@ -1,0 +1,6 @@
+{
+  "name": "class-info",
+  "dependencies": {
+    "node-fetch": "^2.5.0"
+  }
+}

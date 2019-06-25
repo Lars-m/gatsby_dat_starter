@@ -1,0 +1,6 @@
+{
+  "name": "learning-goals",
+  "dependencies": {
+    "node-fetch": "^2.5.0"
+  }
+}
