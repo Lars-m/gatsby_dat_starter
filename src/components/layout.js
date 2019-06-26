@@ -85,9 +85,11 @@ class Container extends React.Component {
         
         if (include) {
           node.sortField = getDateFromDkDate(shortTitle)
+          //node.sortField = shortTitle
             .toString()
             .toLowerCase();
         }
+        console.log("-->",node.sortField)
         return include;
       })
       .sort((a, b) => (a.sortField >= b.sortField ? 1 : -1));
