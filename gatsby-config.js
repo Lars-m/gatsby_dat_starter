@@ -53,6 +53,9 @@ module.exports = {
             options: {
               size: 24
             }
+          },
+          {
+            resolve :"gatsby-remark-goals",options: {}
           }
         ]
       }
@@ -61,7 +64,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: "DAT 3. Semester Fall 2010",
+        name: "DAT 3. Semester Fall 2019",
         short_name: "DAT3-f2019",
         start_url: "/",
         background_color: "#6b37bf",

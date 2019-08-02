@@ -3,8 +3,8 @@ import { graphql } from "gatsby";
 import Layout from "../components/layout";
 //import all from "../helpers/periodLinks";
 import "../../style.css";
-import {getOverridenPageInfo} from "../helpers/node-helper";
-import makeUlForGoals from "../helpers/goalHelper";
+import { getOverridenPageInfo } from "../helpers/node-helper";
+import { makeUlForGoalsV2 } from "../helpers/goalHelper";
 
 //To Style (add line breaks) frontmatter
 // Uses example from here: https://github.com/gatsbyjs/gatsby/issues/5021
@@ -26,14 +26,20 @@ function getDayInfo(data, selectedClass) {
     details = <a href={timeEditURL}>See TimeEdit</a>;
     const info = JSON.parse(infoForDay.dayInfo);
     const infoClass = info[selectedClass];
-    if (!infoClass || !('teacher' in infoClass) ||!('room' in infoClass) ||!('time' in infoClass)) {
+    if (
+      !infoClass ||
+      !("teacher" in infoClass) ||
+      !("room" in infoClass) ||
+      !("time" in infoClass)
+    ) {
       console.error(
         `No info found for class: ${selectedClass}. Is class columns for this class defined in sheet `,
-        data.markdownRemark.fields.shortTitle,infoClass
+        data.markdownRemark.fields.shortTitle,
+        infoClass
       );
       return details;
     }
-    const {teacher,room,time} = infoClass;
+    const { teacher, room, time } = infoClass;
     if (teacher === null && room === null && time === null) {
       return details;
     } else {
@@ -46,29 +52,15 @@ function getDayInfo(data, selectedClass) {
   return details;
 }
 
-// function getOverriddenInfo(nodes,selectedClass, data) {
-//   let replacementHTML = null;
-//   if (!selectedClass) {
-//     console.error("No Class Selected, cannot provide overridden page-info");
-//     return replacementHTML;
-//   }
-//   nodes.forEach(node => {
-//     if (selectedClass) {
-//       const searchString = `pages/${data.markdownRemark.fields.inFolder}/${selectedClass}/${data.markdownRemark.fields.fileName.base}`;
-//       nodes.forEach(n => {
-//         if (searchString === n.fields.fileName.relativePath) {
-//           console.log("FOUND -> ", n.fields.fileName.relativePath);
-//           replacementHTML = n.html;
-//         }
-//       });
-//     }
-//   });
-//   return replacementHTML;
-// }
-
 export default ({ data }) => {
   const post = data.markdownRemark;
-  const learningGoal = data.learningGoal;
+  let learningGoal;
+  console.log(post.frontmatter)
+  if (post.frontmatter.learningGoals) {
+    try {
+      learningGoal = JSON.parse(post.frontmatter.learningGoals).goals;
+    } catch (e) {}
+  }
   let dayInfo = null;
   let title = post.fields.title;
   let periodInfoHtml = null;
@@ -83,13 +75,20 @@ export default ({ data }) => {
     dayInfo = getDayInfo(data, selectedClass);
     const folder = data.markdownRemark.fields.inFolder;
     const fileName = data.markdownRemark.fields.fileName.base;
-    replacementHTML = getOverridenPageInfo(nodes,selectedClass, folder,fileName);
+    replacementHTML = getOverridenPageInfo(
+      nodes,
+      selectedClass,
+      folder,
+      fileName
+    );
   }
 
   if (data.site.siteMetadata.showWeekInfoForEachDayInWeek) {
     nodes.forEach(node => {
-      if (node.fields.isIndex && node.fields.inFolder === post.fields.inFolder) {
- 
+      if (
+        node.fields.isIndex &&
+        node.fields.inFolder === post.fields.inFolder
+      ) {
         periodTitle = node.fields.title;
         periodInfoHtml = node.html;
       }
@@ -105,8 +104,8 @@ export default ({ data }) => {
     : "";
   const goals = learningGoal ? (
     <React.Fragment>
-      <h3 style={{ color: "#295683" }}>After this day you are expected to :</h3>
-      {makeUlForGoals(learningGoal)}
+      <h3 style={{ color: "#295683",marginTop:0 }}>After this day you are expected to :</h3>
+      {makeUlForGoalsV2(learningGoal)}
     </React.Fragment>
   ) : (
     ""
@@ -147,16 +146,18 @@ export default ({ data }) => {
   );
 };
 
-export const query = graphql`
-  query($slug: String!, $shortTitle: String!) {
-    learningGoal(day: { eq: $shortTitle }) {
+/*
+OLD way of fetching goals from the external google-sheet
+ learningGoal(day: { eq: $shortTitle }) {
       id
       day
       week
       period
       goals
     }
-
+*/
+export const query = graphql`
+  query($slug: String!, $shortTitle: String!) {
     dayInfo(day: { eq: $shortTitle }) {
       id
       day
@@ -186,6 +187,7 @@ export const query = graphql`
       frontmatter {
         pageintro
         headertext
+        learningGoals
       }
     }
     allMarkdownRemark {
@@ -208,5 +210,3 @@ export const query = graphql`
     }
   }
 `;
-
-

@@ -68,7 +68,6 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
         value: shortTitle
       });
     }
-
     if (node.frontmatter.isSP) {
       createNodeField({
         node,

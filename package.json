@@ -28,7 +28,7 @@
     "gatsby-source-filesystem": "^2.0.33",
     "gatsby-transformer-remark": "^2.1.12",
     "gatsby-transformer-sharp": "^2.1.19",
-    "marked": "^0.6.2",
+    "marked": "^0.7.0",
     "prismjs": "^1.15.0",
     "react": "^16.5.1",
     "react-accessible-accordion": "^3.0.0",

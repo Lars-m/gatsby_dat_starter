@@ -1,0 +1,15 @@
+{
+  "name": "gatsby-remark-goals",
+  "version": "0.1.0",
+  "description": "todo",
+  "main": "src/index.js",
+  "keywords": [],
+  "author": "lam@cphbusiness.dk",
+  "license": "MIT",
+  "dependencies": {
+    "install": "^0.13.0",
+    "npm": "^6.10.2",
+    "unist-util-select": "^2.0.2",
+    "unist-util-visit": "^2.0.0"
+  }
+}

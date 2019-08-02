@@ -20,7 +20,8 @@ module.exports = {
     },
     {
       title:"Goals",
-      route: "/learning-goals"
+      //route: "/learning-goals"
+      route: "/all-goals"
     },
     {
       title:"Exercises",
